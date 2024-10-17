@@ -6,9 +6,10 @@ namespace Demo.PL.MappingProfiles
 {
 	public class RoleProfile : Profile
 	{
-        public RoleProfile()
-        {
-            CreateMap<IdentityRole, RoleViewModel>();
-        }
-    }
+		public RoleProfile()
+		{
+			CreateMap<IdentityRole, RoleViewModel>()
+				.ForMember(d => d.RoleName, O => O.MapFrom(S => S.Name)).ReverseMap();
+		}
+	}
 }

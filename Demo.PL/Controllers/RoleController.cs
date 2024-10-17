@@ -32,8 +32,24 @@ namespace Demo.PL.Controllers
 			{
 				var Role = await _roleManager.FindByNameAsync(SearchValue);
 				var MappedRole = _mapper.Map<IdentityRole, RoleViewModel>(Role);
-				return View(new List<RoleViewModel>() { MappedRole});
+				return View(new List<RoleViewModel>() { MappedRole });
 			}
+		}
+
+		public IActionResult Create()
+		{
+			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult> Create(RoleViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var MappedRole = _mapper.Map<RoleViewModel, IdentityRole>(model);
+				await _roleManager.CreateAsync(MappedRole);
+				return RedirectToAction(nameof(Index));
+			}
+			return View(model);
 		}
 	}
 }
