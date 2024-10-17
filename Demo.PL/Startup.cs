@@ -1,3 +1,4 @@
+using AutoMapper;
 using Demo.BLL.Interfaces;
 using Demo.BLL.Repositories;
 using Demo.DAL.Contexts;
@@ -40,7 +41,10 @@ namespace Demo.PL
 			services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 			services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-			services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+			services.AddAutoMapper(M => M.AddProfiles(new List<Profile>() { new EmployeeProfile(), new UserProfile() }));
+			//services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
+			//services.AddAutoMapper(M => M.AddProfile(new UserProfile()));
+
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			services.AddIdentity<ApplicationUser, IdentityRole>(Options =>
@@ -49,8 +53,8 @@ namespace Demo.PL
 				Options.Password.RequireDigit = true; //1234
 				Options.Password.RequireLowercase = true; //ssfs
 				Options.Password.RequireUppercase = true; //FDSDS
-				//Pa$$w0rd
-				//P@ssw0rd
+														  //Pa$$w0rd
+														  //P@ssw0rd
 			})
 					.AddEntityFrameworkStores<MvcAppDbContext>()
 					.AddDefaultTokenProviders();
