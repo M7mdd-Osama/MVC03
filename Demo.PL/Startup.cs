@@ -41,7 +41,7 @@ namespace Demo.PL
 			services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 			services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-			services.AddAutoMapper(M => M.AddProfiles(new List<Profile>() { new EmployeeProfile(), new UserProfile() }));
+			services.AddAutoMapper(M => M.AddProfiles(new List<Profile>() { new EmployeeProfile(), new UserProfile(), new RoleProfile() }));
 			//services.AddAutoMapper(M => M.AddProfile(new EmployeeProfile()));
 			//services.AddAutoMapper(M => M.AddProfile(new UserProfile()));
 
