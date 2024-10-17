@@ -4,6 +4,7 @@ using Demo.PL.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -52,7 +53,6 @@ namespace Demo.PL.Controllers
 				return View(new List<UserViewModel> { MappedUser });
 			}
 		}
-
 		public async Task<IActionResult> Details(string Id, string ViewName = "Details")
 		{
 			if (Id is null)
@@ -64,5 +64,33 @@ namespace Demo.PL.Controllers
 			return View(ViewName, MappedUser);
 		}
 
+		public async Task<IActionResult> Edit(string Id)
+		{
+			return await Details(Id, "Edit");
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(UserViewModel model, [FromRoute] string id)
+		{
+			if(id != model.Id)
+				return BadRequest();
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					var User = await _userManager.FindByIdAsync(id);
+					User.PhoneNumber = model.PhoneNumber;
+					User.Fname = model.FName;
+					User.Lname = model.LName;
+					await _userManager.UpdateAsync(User);
+					return RedirectToAction(nameof(Index));
+				}
+				catch(Exception ex)
+				{
+					ModelState.AddModelError(string.Empty, ex.Message);
+				}
+			}
+			return View(model);
+		}
 	}
 }
