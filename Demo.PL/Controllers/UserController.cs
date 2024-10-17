@@ -68,11 +68,12 @@ namespace Demo.PL.Controllers
 		{
 			return await Details(Id, "Edit");
 		}
+
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(UserViewModel model, [FromRoute] string id)
 		{
-			if(id != model.Id)
+			if (id != model.Id)
 				return BadRequest();
 			if (ModelState.IsValid)
 			{
@@ -85,12 +86,32 @@ namespace Demo.PL.Controllers
 					await _userManager.UpdateAsync(User);
 					return RedirectToAction(nameof(Index));
 				}
-				catch(Exception ex)
+				catch (Exception ex)
 				{
 					ModelState.AddModelError(string.Empty, ex.Message);
 				}
 			}
 			return View(model);
+		}
+
+		public async Task<IActionResult> Delete(string id)
+		{
+			return await Details(id, "Delete");
+		}
+		[HttpPost]
+		public async Task<IActionResult> ConfirmDelete( string id)
+		{
+			try
+			{
+				var User = await _userManager.FindByIdAsync(id);
+				await _userManager.DeleteAsync(User);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(string.Empty, ex.Message);
+				return RedirectToAction("Error", "Home");
+			}
 		}
 	}
 }
