@@ -6,6 +6,6 @@
 			{				<tr>					<td><img src="~/Files/Images/@employee.ImageName" class="rounded" height="40" width="40" alt="Employee Image"/></td>					<td>@employee.Name</td>					<td>@employee.Age</td>					<td>@Html.DisplayFor(E => employee.Salary)</td>					<td>@Html.DisplayFor(E => employee.Department.Name)</td>					<td>@employee.Address</td>					<td>@Html.DisplayFor(E => employee.Email)</td>					<td>@employee.PhoneNumber</td>					<td>@employee.HireDate</td>					<td>						@if (employee.IsActve == true)
 						{							<i class="fa-solid fa-circle" style="color:green"></i>						}
 						else
-						{							<i class="fa-solid fa-circle" style="color:red"></i>						}					</td>					<partial name="_ButtonsPartialView" model="@employee.Id" />				</tr>			}		</tbody>	</table>}
+						{							<i class="fa-solid fa-circle" style="color:red"></i>						}					</td>					<partial name="_ButtonsPartialView" model="@employee.Id.ToString()" />				</tr>			}		</tbody>	</table>}
 else
 {	<div class="mt-5 alert alert-warning">		<h3>There is No Employees</h3>	</div>}
