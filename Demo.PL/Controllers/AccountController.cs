@@ -50,6 +50,7 @@ namespace Demo.PL.Controllers
 
 		#endregion
 
+		#region Login
 		public IActionResult Login()
 		{
 			return View();
@@ -82,7 +83,13 @@ namespace Demo.PL.Controllers
 				}
 			}
 			return View(model);
-		}
+		} 
+		#endregion
 
-	}
+		public new async Task<IActionResult> SignOut()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction(nameof(Login));
+		}
+    }
 }
