@@ -1,4 +1,5 @@
 ﻿using Demo.DAL.Models;
+using Demo.PL.Helpers;
 using Demo.PL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -106,22 +107,28 @@ namespace Demo.PL.Controllers
 				var User = await _userManager.FindByEmailAsync(model.Email);
 				if (User is not null)
 				{
+					var token = await _userManager.GeneratePasswordResetTokenAsync(User);
+					var ResetPasswordLink = Url.Action("ResetPassword", "Account", new { email = User.Email, Token = token }, Request.Scheme);
+
 					var email = new Email()
 					{
 						Subject = "Reset Password",
 						To = model.Email,
-						Body = "ResetPasswordLink"
+						Body = ResetPasswordLink
 					};
+					EmailSettings.SendEmail(email);
+					return RedirectToAction(nameof(CheckYourInbox));
 				}
 				else
 				{
 					ModelState.AddModelError(string.Empty, "Email is not Exists");
 				}
 			}
-			else
-			{
-				return View("ForgetPassword", model);
-			}
+			return View("ForgetPassword", model);
+		}
+		public IActionResult CheckYourInbox()
+		{
+			return View();
 		}
 	}
 }
