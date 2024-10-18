@@ -83,13 +83,45 @@ namespace Demo.PL.Controllers
 				}
 			}
 			return View(model);
-		} 
+		}
 		#endregion
 
+		#region Sign Out
 		public new async Task<IActionResult> SignOut()
 		{
 			await _signInManager.SignOutAsync();
 			return RedirectToAction(nameof(Login));
 		}
-    }
+		#endregion
+
+		public IActionResult ForgetPassword()
+		{
+			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult> SendEmail(ForgetPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var User = await _userManager.FindByEmailAsync(model.Email);
+				if (User is not null)
+				{
+					var email = new Email()
+					{
+						Subject = "Reset Password",
+						To = model.Email,
+						Body = "ResetPasswordLink"
+					};
+				}
+				else
+				{
+					ModelState.AddModelError(string.Empty, "Email is not Exists");
+				}
+			}
+			else
+			{
+				return View("ForgetPassword", model);
+			}
+		}
+	}
 }
